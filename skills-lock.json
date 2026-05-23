@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "logbook": {
+      "source": "git@github.com:bosun-sh/skills.git",
+      "sourceType": "git",
+      "skillPath": "skills/logbook/SKILL.md",
+      "computedHash": "1fa1736fd8d95e2d957a7137d4f661f4556e6de0392d9315e6ae8d1f70df677a"
+    }
+  }
+}
