@@ -1,0 +1,7 @@
+[mcp_servers.logbook]
+command = "logbook"
+args = [ "mcp" ]
+cwd = "."
+
+[mcp_servers.logbook.env]
+LOGBOOK_WORKSPACE_ROOT = "/Users/jiramirez/code/personal/bosun.sh/modules/chest/dev"
