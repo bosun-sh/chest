@@ -1,31 +1,151 @@
-# chest
+# Chest
 
-## description
+Chest is a self-governance storage system for AI agents.
 
-chest is a tool for ai to store the goals of a project.
-it stores:
+It stores project governance criteria in local, versioned files so agents can
+plan, execute, and validate work against explicit goals without requiring a
+human checkpoint for every decision.
 
-1. OKR
-2. KPI
-3. Definition of done
-4. Definition of ready
+## Overview
 
-and contains scripts to review tasks against this stored goals using an llm-as-a-judge approach.
+Chest helps AI agents keep project work aligned with:
 
-it's based in this bosun's paper: https://zenodo.org/records/19457265
+1. OKRs
+2. KPIs
+3. Definition of Ready
+4. Definition of Done
 
-## tooling
+The project is based on the intervention-penalty problem described in:
+[The Intervention Penalty: A Simulation Study of Human Checkpoint Costs in AI Coding Governance](https://zenodo.org/records/19457265).
 
-this project is built in typescript, using mcp/cli framework "ohtools" (@bosun-sh/ohtools)[https://www.npmjs.com/package/@bosun-sh/ohtools]
+## Problem
 
-## architecture
+Human-in-the-loop AI workflows often depend on repeated approval checkpoints.
+Those checkpoints improve oversight, but they also slow the agent down. As
+checkpoint frequency increases, coordination overhead can become larger than
+the work being governed.
 
-this project should follow a clear separation of concerns, being optimized for new agents to rapidly understand the codebase.
-the approach is:
+Chest is designed for workflows where agents need governance, but repeated
+human intervention should be reserved for cases that cannot be evaluated by
+machine-verifiable criteria.
 
-1. screaming architecture: all files and directories should clearly state what they do in business terms on their name
-2. vertical slicing: each directory contains a vertical
-3. interface-first: each entity should have clear interfaces in a standarized directory within the verticals to be easily accessible
-4. test-driven: all functionalities should be 100% tested
+## Solution
 
-this architectural decisions are meant to make the code easier to navigate, debug and understand.
+Chest replaces repeated human checkpoints with structured agent
+self-regulation.
+
+Instead of asking for approval at every step, an agent can read project goals,
+run validation checks, and report whether a plan or completed task satisfies
+the stored governance criteria.
+
+Chest v1 is specified as a local YAML-backed governance store exposed through
+[`@bosun-sh/ohtools`](https://www.npmjs.com/package/@bosun-sh/ohtools). The
+same tool registry should be available to agents through MCP and to humans or
+automation through CLI commands.
+
+## Core Concepts
+
+### OKRs
+
+Objectives and Key Results define what success means for the project. Agents
+use OKRs to decide whether work is aligned with intended outcomes.
+
+### KPIs
+
+Key Performance Indicators define measurable signals of progress or quality.
+In v1, KPIs are evaluated through command-based checks that produce structured
+evidence.
+
+### Definition of Ready
+
+Definition of Ready defines the minimum criteria a plan must satisfy before an
+agent starts implementation.
+
+### Definition of Done
+
+Definition of Done defines the minimum criteria completed work must satisfy
+before an agent reports it as finished.
+
+## How It Works
+
+Chest is intended to work as a repository-local governance layer:
+
+1. A project initializes Chest storage in local YAML files.
+2. Humans or agents define OKRs, KPIs, Definition of Ready, and Definition of Done.
+3. Agents read the stored governance criteria before planning or implementing.
+4. Agents run KPI command checks to collect measurable evidence.
+5. Agents use provider-agnostic LLM-as-judge validation to evaluate plans or work against the stored criteria.
+6. Agents return structured validation reports that explain pass/fail status, evidence, rationale, and confidence.
+
+## Architecture
+
+Chest should follow a clear separation of concerns and remain easy for new
+agents to understand.
+
+Architectural principles:
+
+1. Screaming architecture: files and directories should be named in business terms.
+2. Vertical slicing: each feature area should keep related domain, application, and adapter code close together.
+3. Interface-first design: domain entities and ports should be explicit and easy to find.
+4. Test-driven implementation: behavior should be covered by automated tests before it is considered complete.
+
+Implementation details and feature boundaries are defined in
+[`docs/concept.spec`](docs/concept.spec).
+
+## Tooling
+
+Chest is a Bun/TypeScript project.
+
+Primary tooling:
+
+1. `@bosun-sh/ohtools` for shared MCP and CLI tool definitions.
+2. `@modelcontextprotocol/sdk` for MCP integration through ohtools adapters.
+3. `effect` for typed effects, dependency boundaries, and runtime composition where needed.
+
+Available scripts:
+
+```sh
+bun run ohtools:list
+bun run ohtools:docs
+bun run ohtools:graph
+```
+
+## Project Status
+
+This repository is currently at the initial specification stage.
+
+The current ohtools app contains placeholder behavior. The README and
+`docs/concept.spec` define the intended product and architecture so atomic
+feature specs can be written next.
+
+## Development
+
+Install dependencies with Bun:
+
+```sh
+bun install
+```
+
+Inspect the ohtools registry:
+
+```sh
+bun run ohtools:list
+```
+
+Generate ohtools documentation:
+
+```sh
+bun run ohtools:docs
+```
+
+Generate the ohtools graph:
+
+```sh
+bun run ohtools:graph
+```
+
+## Reference
+
+- Concept and architecture spec: [`docs/concept.spec`](docs/concept.spec)
+- ohtools package: [`@bosun-sh/ohtools`](https://www.npmjs.com/package/@bosun-sh/ohtools)
+- Research background: [Zenodo record 19457265](https://zenodo.org/records/19457265)
