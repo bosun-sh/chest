@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "chest",
+      "name": "@bosun-sh/chest",
       "dependencies": {
         "@bosun-sh/ohtools": "^0.1.0",
         "@modelcontextprotocol/sdk": "^1.29.0",
