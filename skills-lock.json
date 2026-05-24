@@ -6,6 +6,12 @@
       "sourceType": "git",
       "skillPath": "skills/logbook/SKILL.md",
       "computedHash": "1fa1736fd8d95e2d957a7137d4f661f4556e6de0392d9315e6ae8d1f70df677a"
+    },
+    "ohtools": {
+      "source": "bosun-sh/skills",
+      "sourceType": "github",
+      "skillPath": "skills/ohtools/SKILL.md",
+      "computedHash": "70f0c2c4ae3ce56b04c69a934e308a26c806907e302db907c9681eee5e926b8b"
     }
   }
 }
