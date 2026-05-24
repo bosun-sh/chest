@@ -173,4 +173,4 @@ and humans to navigate.
 
 ## License
 
-ISC. See [`package.json`](package.json) for the current license declaration.
+Apache-2.0. See [`LICENSE`](LICENSE) and [`package.json`](package.json) for the current license declaration.
