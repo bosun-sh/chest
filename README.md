@@ -1,14 +1,19 @@
 # Chest
 
-Chest is a self-governance storage system for AI agents.
+Chest is an open-source self-governance store for AI agent workflows.
 
-It stores project governance criteria in local, versioned files so agents can
-plan, execute, and validate work against explicit goals without requiring a
+It keeps project governance criteria in local, versioned files so agents can
+plan, execute, and validate work against explicit goals without defaulting to a
 human checkpoint for every decision.
 
-## Overview
+## What It Solves
 
-Chest helps AI agents keep project work aligned with:
+AI-assisted workflows often need governance, but repeated checkpoints can turn
+into a throughput bottleneck. Chest is designed for projects where the agent
+can evaluate most decisions against machine-verifiable criteria instead of
+stopping for approval every time.
+
+Chest organizes that governance around:
 
 1. OKRs
 2. KPIs
@@ -18,107 +23,36 @@ Chest helps AI agents keep project work aligned with:
 The project is based on the intervention-penalty problem described in:
 [The Intervention Penalty: A Simulation Study of Human Checkpoint Costs in AI Coding Governance](https://zenodo.org/records/19457265).
 
-## Problem
+## Current State
 
-Human-in-the-loop AI workflows often depend on repeated approval checkpoints.
-Those checkpoints improve oversight, but they also slow the agent down. As
-checkpoint frequency increases, coordination overhead can become larger than
-the work being governed.
+This repository is in the initial scaffold phase for the open-source project.
+The current branch establishes the platform for future feature work:
 
-Chest is designed for workflows where agents need governance, but repeated
-human intervention should be reserved for cases that cannot be evaluated by
-machine-verifiable criteria.
+1. A real `@bosun-sh/ohtools` composition root.
+2. A docs-driven architecture and test layout.
+3. GitHub Actions CI.
+4. Husky pre-commit and pre-push hooks.
 
-## Solution
-
-Chest replaces repeated human checkpoints with structured agent
-self-regulation.
-
-Instead of asking for approval at every step, an agent can read project goals,
-run validation checks, and report whether a plan or completed task satisfies
-the stored governance criteria.
-
-Chest v1 is specified as a local YAML-backed governance store exposed through
-[`@bosun-sh/ohtools`](https://www.npmjs.com/package/@bosun-sh/ohtools). The
-same tool registry should be available to agents through MCP and to humans or
-automation through CLI commands.
-
-## Core Concepts
-
-### OKRs
-
-Objectives and Key Results define what success means for the project. Agents
-use OKRs to decide whether work is aligned with intended outcomes.
-
-### KPIs
-
-Key Performance Indicators define measurable signals of progress or quality.
-In v1, KPIs are evaluated through command-based checks that produce structured
-evidence.
-
-### Definition of Ready
-
-Definition of Ready defines the minimum criteria a plan must satisfy before an
-agent starts implementation.
-
-### Definition of Done
-
-Definition of Done defines the minimum criteria completed work must satisfy
-before an agent reports it as finished.
-
-## How It Works
-
-Chest is intended to work as a repository-local governance layer:
-
-1. A project initializes Chest storage in local YAML files.
-2. Humans or agents define OKRs, KPIs, Definition of Ready, and Definition of Done.
-3. Agents read the stored governance criteria before planning or implementing.
-4. Agents run KPI command checks to collect measurable evidence.
-5. Agents use provider-agnostic LLM-as-judge validation to evaluate plans or work against the stored criteria.
-6. Agents return structured validation reports that explain pass/fail status, evidence, rationale, and confidence.
+The implementation is intentionally platform-first so future feature slices can
+be added without reshaping the foundation.
 
 ## Architecture
 
-Chest should follow a clear separation of concerns and remain easy for new
-agents to understand.
+Chest follows a screaming-architecture, vertical-slice layout:
 
-Architectural principles:
+1. Domain slices own governance concepts and validation semantics.
+2. Workspace modules own storage paths, runtime composition, and repo-local initialization.
+3. Plugin modules expose thin `ohtools` bridges for MCP and CLI use.
+4. Shared helpers stay small and reusable.
 
-1. Screaming architecture: files and directories should be named in business terms.
-2. Vertical slicing: each feature area should keep related domain, application, and adapter code close together.
-3. Interface-first design: domain entities and ports should be explicit and easy to find.
-4. Test-driven implementation: behavior should be covered by automated tests before it is considered complete.
+Design details and feature boundaries are documented in:
 
-Implementation details and feature boundaries are defined in
-[`docs/concept.spec`](docs/concept.spec).
+- [`docs/concept.spec`](docs/concept.spec)
+- [`docs/functional.spec`](docs/functional.spec)
+- [`docs/technical.spec`](docs/technical.spec)
+- [`docs/test.spec`](docs/test.spec)
 
-## Tooling
-
-Chest is a Bun/TypeScript project.
-
-Primary tooling:
-
-1. `@bosun-sh/ohtools` for shared MCP and CLI tool definitions.
-2. `@modelcontextprotocol/sdk` for MCP integration through ohtools adapters.
-3. `effect` for typed effects, dependency boundaries, and runtime composition where needed.
-
-Available scripts:
-
-```sh
-bun run ohtools:list
-bun run ohtools:docs
-bun run ohtools:graph
-```
-
-## Project Status
-
-This repository is currently at the initial specification stage.
-
-The current ohtools app contains placeholder behavior. The README and
-`docs/concept.spec` define the intended product and architecture so atomic
-feature specs can be written next.
-
-## Development
+## Getting Started
 
 Install dependencies with Bun:
 
@@ -126,26 +60,61 @@ Install dependencies with Bun:
 bun install
 ```
 
-Inspect the ohtools registry:
+Inspect the tool registry:
 
 ```sh
 bun run ohtools:list
 ```
 
-Generate ohtools documentation:
+Generate documentation:
 
 ```sh
 bun run ohtools:docs
 ```
 
-Generate the ohtools graph:
+Generate the architecture graph:
 
 ```sh
 bun run ohtools:graph
 ```
 
-## Reference
+Initialize a local Chest store in the current repository:
 
-- Concept and architecture spec: [`docs/concept.spec`](docs/concept.spec)
-- ohtools package: [`@bosun-sh/ohtools`](https://www.npmjs.com/package/@bosun-sh/ohtools)
-- Research background: [Zenodo record 19457265](https://zenodo.org/records/19457265)
+```sh
+bunx ohtools --app src/ohtools.ts run chest.init --input '{}'
+```
+
+## Development Workflow
+
+The repo uses the same commands locally and in CI:
+
+```sh
+bun run lint
+bun run test:unit
+bun run test:e2e
+bun run build
+```
+
+Git hooks are managed with Husky:
+
+- `pre-commit` runs `lint` and `test:unit`
+- `pre-push` runs `test:e2e` and `build`
+
+## Repository Layout
+
+- `src/` contains the implementation scaffold.
+- `tests/` contains unit, integration, and e2e coverage.
+- `docs/` contains the contract specs for the project and future feature slices.
+- `.github/workflows/ci.yml` defines the GitHub Actions pipeline.
+
+## Contributing
+
+Issues and pull requests are welcome.
+
+If you plan to change behavior, keep the docs, tests, and public tool surface
+aligned with the implementation. The repo is intended to stay easy for agents
+and humans to navigate.
+
+## License
+
+ISC. See [`package.json`](package.json) for the current license declaration.

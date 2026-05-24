@@ -7,7 +7,13 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "bunx biome lint .",
+    "test": "bun test",
+    "test:unit": "bun test tests/unit tests/integration",
+    "test:e2e": "bun test tests/e2e",
+    "build": "bunx tsc -p tsconfig.build.json",
+    "prepare": "husky",
+    "typecheck": "bunx tsc --noEmit",
     "ohtools:list": "bunx ohtools --app ./src/ohtools.ts list",
     "ohtools:docs": "bunx ohtools --app ./src/ohtools.ts docs",
     "ohtools:graph": "bunx ohtools --app ./src/ohtools.ts graph"
@@ -16,5 +22,9 @@
     "@bosun-sh/ohtools": "^0.1.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "effect": "^3.13.10"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "husky": "^9.1.7"
   }
 }
