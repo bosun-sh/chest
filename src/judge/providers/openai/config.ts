@@ -7,5 +7,5 @@ export type OpenAIJudgeConfig = {
 export const readOpenAIJudgeConfig = (): OpenAIJudgeConfig => ({
   apiKey: process.env.OPENAI_API_KEY,
   model: process.env.OPENAI_JUDGE_MODEL,
-  timeoutMs: Number(process.env.CHEST_JUDGE_TIMEOUT_MS || "30000"),
+  timeoutMs: Number(process.env.CHEST_JUDGE_TIMEOUT_MS || "30000") || 30000,
 });

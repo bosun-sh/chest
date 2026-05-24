@@ -5,7 +5,11 @@ import { parseYaml, stringifyYaml } from "../shared/yaml-parse";
 
 export const readArrayFile = async <T>(filePath: string): Promise<T[]> => {
   const contents = await readFile(filePath, "utf8");
-  return parseYaml<T[]>(contents);
+  const parsed = parseYaml<unknown>(contents);
+  if (!Array.isArray(parsed)) {
+    throw new Error(`YAML collection at ${filePath} must be a top-level array.`);
+  }
+  return parsed as T[];
 };
 
 export const writeArrayFile = async <T>(

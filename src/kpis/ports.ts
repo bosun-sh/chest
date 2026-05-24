@@ -1,3 +1,4 @@
+import { Context } from "effect";
 import type { KPI, KPIEvidence } from "./schema";
 
 export type KPIRepositoryError =
@@ -20,3 +21,6 @@ export interface KPIRunner {
   run(kpi: KPI): Promise<KPIEvidence>;
   runAll(kpis: KPI[]): Promise<KPIEvidence[]>;
 }
+
+export const KPIRepository = Context.GenericTag<KPIRepository>("KPIRepository");
+export const KPIRunner = Context.GenericTag<KPIRunner>("KPIRunner");

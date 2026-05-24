@@ -1,3 +1,5 @@
+import { chestPlugins } from "./tool-registry";
+
 export const chestToolIds = [
   "chest.init",
   "chest.okrs.list",
@@ -22,3 +24,5 @@ export const chestToolIds = [
 ] as const;
 
 export type ChestToolId = (typeof chestToolIds)[number];
+
+export { chestPlugins };

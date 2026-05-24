@@ -6,7 +6,8 @@
     "rootDir": "./src",
     "module": "CommonJS",
     "declaration": true,
-    "emitDeclarationOnly": false
+    "emitDeclarationOnly": false,
+    "skipLibCheck": true
   },
   "include": ["src"]
 }

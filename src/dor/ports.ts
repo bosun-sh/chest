@@ -1,3 +1,4 @@
+import { Context } from "effect";
 import type { DoRCriterion } from "./schema";
 
 export type DoRRepositoryError =
@@ -11,3 +12,5 @@ export interface DoRRepository {
   list(): Promise<DoRCriterion[]>;
   save(record: DoRCriterion): Promise<void>;
 }
+
+export const DoRRepository = Context.GenericTag<DoRRepository>("DoRRepository");

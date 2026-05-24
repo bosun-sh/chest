@@ -1,5 +1,9 @@
+import { Context } from "effect";
+import { newId } from "./ids";
+
 export interface Clock {
   now(): Date;
+  newId(): string;
 }
 
 export interface Logger {
@@ -8,8 +12,12 @@ export interface Logger {
   error(message: string, context?: Record<string, unknown>): void;
 }
 
+export const Clock = Context.GenericTag<Clock>("Clock");
+export const Logger = Context.GenericTag<Logger>("Logger");
+
 export const systemClock: Clock = {
   now: () => new Date(),
+  newId,
 };
 
 export const consoleLogger: Logger = {

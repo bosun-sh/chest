@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { mkdir } from "node:fs/promises";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { join } from "node:path";
 
 const repoRoot = process.cwd();
@@ -60,5 +60,35 @@ describe("ohtools cli", () => {
     expect(initJson.data.toolId).toBe("chest.init");
     expect(initJson.data.output.ok).toBe(true);
     expect(initJson.data.output.data.created).toHaveLength(4);
+  });
+
+  it("TC-OHT-04: rejects extra input with OHTOOLS_VALIDATION_ERROR", () => {
+    const result = spawnSync(
+      "bunx",
+      [
+        "ohtools",
+        "--app",
+        "src/ohtools.ts",
+        "run",
+        "chest.init",
+        "--input",
+        JSON.stringify({ unexpected_field: "x" }),
+      ],
+      {
+        cwd: repoRoot,
+        encoding: "utf8",
+      },
+    );
+
+    expect(result.status).toBe(3);
+
+    const parsed = JSON.parse(result.stderr.trim()) as {
+      ok: false;
+      error: { code: string; message: string };
+    };
+
+    expect(parsed.ok).toBe(false);
+    expect(parsed.error.code).toBe("OHTOOLS_VALIDATION_ERROR");
+    expect(parsed.error.message).toContain("Input does not match JSON Schema");
   });
 });

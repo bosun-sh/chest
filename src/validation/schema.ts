@@ -6,7 +6,7 @@ export type EvidenceRef = {
 
 export type ValidationReport = {
   id: string;
-  workflow: "ready" | "done" | "judge" | "kpi";
+  workflow: "ready" | "done" | "align" | "judge" | "kpi";
   timestamp: string;
   status: "passed" | "failed" | "needs_review";
   rationale: string;
@@ -17,7 +17,7 @@ export type ValidationReport = {
 
 export type JudgeRequest = {
   mode: string;
-  criteria: string[];
+  criteria: unknown[];
   okrs: unknown[];
   evidence: unknown;
   kpiEvidence?: unknown[];

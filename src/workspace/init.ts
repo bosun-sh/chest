@@ -1,10 +1,9 @@
 import { access, mkdir, readFile } from "node:fs/promises";
-import { constants as fsConstants } from "node:fs";
 import { resolveChestPaths } from "./storage-paths";
 import { atomicWriteText } from "../shared/atomic-write";
 import { fail, ok, type ToolResult } from "../shared/result";
 import { ERR_CHEST_03, ERR_CHEST_10 } from "../shared/error-codes";
-import { stringifyYaml } from "../shared/yaml-parse";
+import { parseYaml, stringifyYaml } from "../shared/yaml-parse";
 
 export type InitWorkspaceInput = {
   dir?: string;
@@ -23,12 +22,6 @@ export const initWorkspace = async (
   const paths = resolveChestPaths(root);
 
   try {
-    await access(root, fsConstants.W_OK);
-  } catch (error) {
-    return fail(ERR_CHEST_03, `Chest store cannot be written at ${root}.`, error);
-  }
-
-  try {
     await access(paths.storeDir);
     if (!input.force) {
       return fail(
@@ -40,8 +33,14 @@ export const initWorkspace = async (
     // no existing store
   }
 
+  try {
+    await mkdir(root, { recursive: true });
+  } catch (error) {
+    const cause = error instanceof Error ? error.message : String(error);
+    return fail(ERR_CHEST_03, `Cannot write to ${paths.storeDir}: ${cause}`, error);
+  }
+
   await mkdir(paths.storeDir, { recursive: true });
-  await mkdir(paths.reportsDir, { recursive: true });
 
   const created = [
     paths.okrsFile,
@@ -60,7 +59,7 @@ export const initWorkspace = async (
 
 export const readWorkspaceFile = async <T>(filePath: string): Promise<T> => {
   const contents = await readFile(filePath, "utf8");
-  return JSON.parse(contents) as T;
+  return parseYaml<T>(contents);
 };
 
 export const writeWorkspaceFile = async (
