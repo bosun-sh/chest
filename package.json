@@ -1,17 +1,37 @@
 {
-  "name": "chest",
+  "name": "@bosun-sh/chest",
   "version": "0.0.1",
-  "description": "goals storage for ai agents",
-  "license": "ISC",
+  "description": "Local governance store for AI agent workflows.",
+  "license": "Apache-2.0",
   "author": "bosun.sh",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./ohtools": {
+      "types": "./dist/ohtools.d.ts",
+      "require": "./dist/ohtools.js",
+      "default": "./dist/ohtools.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
   "scripts": {
     "lint": "bunx biome lint .",
     "test": "bun test",
     "test:unit": "bun test tests/unit tests/integration",
     "test:e2e": "bun test tests/e2e",
     "build": "bunx tsc -p tsconfig.build.json",
+    "prepack": "bun run build",
     "prepare": "husky",
     "typecheck": "bunx tsc --noEmit",
     "ohtools:list": "bunx ohtools --app ./src/ohtools.ts list",
