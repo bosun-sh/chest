@@ -25,16 +25,36 @@ The project is based on the intervention-penalty problem described in:
 
 ## Current State
 
-This repository is in the initial scaffold phase for the open-source project.
-The current branch establishes the platform for future feature work:
+Chest is implemented as a real `@bosun-sh/ohtools` registry with 20 Chest tool
+IDs exposed through the CLI and MCP surfaces. The checked-in implementation
+includes:
 
-1. A real `@bosun-sh/ohtools` composition root.
-2. A docs-driven architecture and test layout.
-3. GitHub Actions CI.
-4. Husky pre-commit and pre-push hooks.
+1. `src/ohtools.ts` as the registry composition root used by `bunx ohtools`.
+2. `src/workspace/cli-adapter.ts` for CLI attachment.
+3. `src/workspace/mcp-server.ts` as the stdio MCP bridge used by the e2e parity
+   test.
+4. YAML-backed OKR, KPI, DoR, DoD, validation, judge, and report workflows.
+5. Validation and report tools that persist report files under `.chest/reports/`.
 
-The implementation is intentionally platform-first so future feature slices can
-be added without reshaping the foundation.
+The local store is created under `.chest/` with these files:
+
+- `.chest/okrs.yaml`
+- `.chest/kpis.yaml`
+- `.chest/definition-of-ready.yaml`
+- `.chest/definition-of-done.yaml`
+- `.chest/reports/*.yaml`
+
+The registry exposes:
+
+- `chest.init`
+- `chest.okrs.list`, `chest.okrs.get`, `chest.okrs.upsert`, `chest.okrs.remove`
+- `chest.kpis.list`, `chest.kpis.get`, `chest.kpis.upsert`, `chest.kpis.remove`
+- `chest.kpis.run`, `chest.kpis.run-all`
+- `chest.dor.list`, `chest.dor.upsert`
+- `chest.dod.list`, `chest.dod.upsert`
+- `chest.validate.ready`, `chest.validate.done`
+- `chest.judge.align`
+- `chest.reports.list`, `chest.reports.get`
 
 ## Architecture
 
@@ -84,6 +104,39 @@ Initialize a local Chest store in the current repository:
 bunx ohtools --app src/ohtools.ts run chest.init --input '{}'
 ```
 
+Inspect governance:
+
+```sh
+bunx ohtools --app src/ohtools.ts run chest.okrs.list --input '{}'
+bunx ohtools --app src/ohtools.ts run chest.kpis.list --input '{}'
+bunx ohtools --app src/ohtools.ts run chest.dor.list --input '{}'
+bunx ohtools --app src/ohtools.ts run chest.dod.list --input '{}'
+```
+
+Validate a plan or completed work:
+
+```sh
+bunx ohtools --app src/ohtools.ts run chest.validate.ready --input '{"plan":"Implement the feature with acceptance criteria, risks, and tests."}'
+bunx ohtools --app src/ohtools.ts run chest.validate.done --input '{"work_evidence":"Implemented the feature and all checks pass."}'
+```
+
+Run KPI commands and fetch persisted validation reports:
+
+```sh
+bunx ohtools --app src/ohtools.ts run chest.kpis.run-all --input '{}'
+bunx ohtools --app src/ohtools.ts run chest.reports.list --input '{}'
+```
+
+Run the stdio MCP parity bridge used by the e2e coverage from your own launcher
+or client process. The server entrypoint lives in
+[`src/workspace/mcp-server.ts`](src/workspace/mcp-server.ts) and exposes the
+same 20 Chest tools over MCP `tools/list` and `tools/call`.
+
+Judge workflows use the configured provider when available and return structured
+`ValidationReport` envelopes. Validation failures are persisted as reports when
+the workflow can complete, so later agents or CI jobs can inspect the decision
+history through `chest.reports.list` and `chest.reports.get`.
+
 ## Development Workflow
 
 The repo uses the same commands locally and in CI:
@@ -100,11 +153,14 @@ Git hooks are managed with Husky:
 - `pre-commit` runs `lint` and `test:unit`
 - `pre-push` runs `test:e2e` and `build`
 
+CLI error envelopes are JSON and exit nonzero; capture the error stream when
+parsing failures such as `OHTOOLS_VALIDATION_ERROR`.
+
 ## Repository Layout
 
-- `src/` contains the implementation scaffold.
+- `src/` contains the Chest registry, adapters, domain slices, ports, and workspace helpers.
 - `tests/` contains unit, integration, and e2e coverage.
-- `docs/` contains the contract specs for the project and future feature slices.
+- `docs/` contains the contract specs for the implemented v1 feature slices.
 - `.github/workflows/ci.yml` defines the GitHub Actions pipeline.
 
 ## Contributing

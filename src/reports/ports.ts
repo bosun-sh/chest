@@ -1,3 +1,4 @@
+import { Context } from "effect";
 import type { ValidationReport } from "./schema";
 import type { ReportSummary } from "./schema";
 
@@ -10,3 +11,5 @@ export interface ReportRepository {
   findById(id: string): Promise<ValidationReport | undefined>;
   write(report: ValidationReport): Promise<void>;
 }
+
+export const ReportRepository = Context.GenericTag<ReportRepository>("ReportRepository");

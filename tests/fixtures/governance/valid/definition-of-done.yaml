@@ -1,0 +1,7 @@
+- id: dod-1
+  text: All tests pass
+  severity: blocking
+  requiresKpi: kpi-1
+- id: dod-2
+  text: Implementation matches plan
+  severity: blocking

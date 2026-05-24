@@ -1,0 +1,6 @@
+- id: okr-1
+  objective: Broken record
+    keyResults:
+      - id: kr-1
+        description: Bad indentation
+        target: 1

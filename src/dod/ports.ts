@@ -1,3 +1,4 @@
+import { Context } from "effect";
 import type { DoDCriterion } from "./schema";
 
 export type DoDRepositoryError =
@@ -11,3 +12,5 @@ export interface DoDRepository {
   list(): Promise<DoDCriterion[]>;
   save(record: DoDCriterion): Promise<void>;
 }
+
+export const DoDRepository = Context.GenericTag<DoDRepository>("DoDRepository");

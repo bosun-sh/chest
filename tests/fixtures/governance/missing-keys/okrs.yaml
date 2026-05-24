@@ -1,0 +1,11 @@
+- id: okr-1
+  objective: Deliver chest v1 to production
+  keyResults:
+    - id: kr-1
+      description: All 30 spec files written
+      target: 30 files
+- id: okr-2
+  keyResults:
+    - id: kr-2
+      description: Missing objective
+      target: "100%"

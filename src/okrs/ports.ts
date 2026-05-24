@@ -1,3 +1,4 @@
+import { Context } from "effect";
 import type { OKR } from "./schema";
 
 export type OKRRepositoryError =
@@ -13,3 +14,5 @@ export interface OKRRepository {
   save(record: OKR): Promise<void>;
   remove(id: string): Promise<void>;
 }
+
+export const OKRRepository = Context.GenericTag<OKRRepository>("OKRRepository");

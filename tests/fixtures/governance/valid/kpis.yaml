@@ -1,0 +1,15 @@
+- id: kpi-1
+  name: Test suite passes
+  target: exit 0
+  command:
+    - bun
+    - test
+  timeoutMs: 5000
+- id: kpi-2
+  name: TypeCheck passes
+  target: exit 0
+  command:
+    - bun
+    - run
+    - typecheck
+  timeoutMs: 5000

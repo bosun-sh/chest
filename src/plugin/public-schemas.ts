@@ -127,7 +127,7 @@ const reportsListSchema = {
 } as const;
 
 export const chestInputSchemas = {
-  init: {
+  "chest.init": {
     type: "object",
     properties: {
       dir: { type: "string" },
@@ -135,13 +135,25 @@ export const chestInputSchemas = {
     },
     additionalProperties: false,
   } as const,
-  emptyObject: emptyObjectSchema,
-  id: idSchema,
-  okrRecord: okrRecordSchema,
-  kpiRecord: kpiRecordSchema,
-  criterion: criterionSchema,
-  validateReady: validateReadySchema,
-  validateDone: validateDoneSchema,
-  judgeAlign: judgeAlignSchema,
-  reportsList: reportsListSchema,
+  "chest.okrs.list": emptyObjectSchema,
+  "chest.okrs.get": idSchema,
+  "chest.okrs.upsert": okrRecordSchema,
+  "chest.okrs.remove": idSchema,
+  "chest.kpis.list": emptyObjectSchema,
+  "chest.kpis.get": idSchema,
+  "chest.kpis.upsert": kpiRecordSchema,
+  "chest.kpis.remove": idSchema,
+  "chest.kpis.run": idSchema,
+  "chest.kpis.run-all": emptyObjectSchema,
+  "chest.dor.list": emptyObjectSchema,
+  "chest.dor.upsert": criterionSchema,
+  "chest.dod.list": emptyObjectSchema,
+  "chest.dod.upsert": criterionSchema,
+  "chest.validate.ready": validateReadySchema,
+  "chest.validate.done": validateDoneSchema,
+  "chest.judge.align": judgeAlignSchema,
+  "chest.reports.list": reportsListSchema,
+  "chest.reports.get": idSchema,
 } as const;
+
+export type ChestInputSchemaId = keyof typeof chestInputSchemas;
