@@ -8,9 +8,10 @@ import { validateDoR } from "../../src/dor/schema";
 import { validateDoD } from "../../src/dod/schema";
 import { loadCollection, readRecord } from "../../src/plugin/record-store";
 import type { OKR } from "../../src/okrs/schema";
+import { createTempDir } from "../support/temp-dir";
 
 const fixtureRoot = join(process.cwd(), "tests/fixtures/governance");
-const tempRoot = join("/private/tmp", `chest-read-${Date.now()}`);
+const tempRoot = createTempDir("chest-read");
 const storeDir = join(tempRoot, ".chest");
 const okrsFile = join(storeDir, "okrs.yaml");
 

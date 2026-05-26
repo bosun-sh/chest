@@ -4,9 +4,10 @@ import { join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { chestToolIds } from "../../src/plugin/registry";
+import { createTempDir } from "../support/temp-dir";
 
 const repoRoot = process.cwd();
-const tempRoot = join("/private/tmp", `chest-mcp-e2e-${Date.now()}`);
+const tempRoot = createTempDir("chest-mcp-e2e");
 const chestRoot = join(tempRoot, ".chest");
 const launcherPath = join(repoRoot, "tests/e2e/.launch-mcp.ts");
 const fixtureRoot = join(repoRoot, "tests/fixtures/governance/valid");

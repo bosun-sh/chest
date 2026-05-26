@@ -6,6 +6,7 @@ import { chestInputSchemas } from "../../../src/plugin/public-schemas";
 import chestApp from "../../../src/ohtools";
 import { chestCliApp } from "../../../src/workspace/cli-adapter";
 import { chestMcpApp } from "../../../src/workspace/mcp-server";
+import { createTempDir } from "../../support/temp-dir";
 
 describe("ohtools exposure", () => {
   it("TC-OHT-01: exposes public input schemas for every tool id", () => {
@@ -33,7 +34,7 @@ describe("ohtools exposure", () => {
   });
 
   it("TC-OHT-02: tool handlers return ToolResult envelopes", async () => {
-    const tempRoot = join("/private/tmp", `chest-oht-${Date.now()}`);
+    const tempRoot = createTempDir("chest-oht");
     await mkdir(tempRoot, { recursive: true });
 
     const tool = chestApp.build().tools.get("chest.init");

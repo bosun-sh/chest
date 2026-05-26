@@ -5,6 +5,7 @@ import { runAllKPIs } from "../../../src/kpis/run-all";
 import { runKPI } from "../../../src/kpis/run";
 import type { KPI } from "../../../src/kpis/schema";
 import { kpisRunTool } from "../../../src/plugin/kpis-tools";
+import { createTempDir } from "../../support/temp-dir";
 
 const echoKpi: KPI = {
   id: "kpi-echo",
@@ -38,7 +39,7 @@ const missingCommandKpi: KPI = {
   timeoutMs: 1000,
 };
 
-const tempRoot = join("/private/tmp", `chest-kpis-${Date.now()}`);
+const tempRoot = createTempDir("chest-kpis");
 const chestDir = join(tempRoot, ".chest");
 
 afterEach(async () => {

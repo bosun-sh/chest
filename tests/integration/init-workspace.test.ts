@@ -3,8 +3,9 @@ import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { constants as fsConstants } from "node:fs";
 import { join } from "node:path";
 import { initWorkspace } from "../../src/workspace/init";
+import { createTempDir } from "../support/temp-dir";
 
-const tempRoot = join("/private/tmp", `chest-scaffold-${Date.now()}`);
+const tempRoot = createTempDir("chest-scaffold");
 const storeDir = join(tempRoot, ".chest");
 const storeFiles = [
   "okrs.yaml",

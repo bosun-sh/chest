@@ -4,9 +4,10 @@ import { join } from "node:path";
 import { atomicWriteText } from "../../src/shared/atomic-write";
 import { upsertRecord } from "../../src/plugin/record-store";
 import type { OKR } from "../../src/okrs/schema";
+import { createTempDir } from "../support/temp-dir";
 
 const fixtureRoot = join(process.cwd(), "tests/fixtures/governance/valid");
-const tempRoot = join("/private/tmp", `chest-write-${Date.now()}`);
+const tempRoot = createTempDir("chest-write");
 const storeDir = join(tempRoot, ".chest");
 const okrsFile = join(storeDir, "okrs.yaml");
 

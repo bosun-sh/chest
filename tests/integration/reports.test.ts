@@ -3,8 +3,9 @@ import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { reportsGetTool, reportsListTool } from "../../src/plugin/reports-tools";
 import type { ValidationReport } from "../../src/validation/schema";
+import { createTempDir } from "../support/temp-dir";
 
-const tempRoot = join("/private/tmp", `chest-reports-${Date.now()}`);
+const tempRoot = createTempDir("chest-reports");
 const chestDir = join(tempRoot, ".chest");
 const reportsDir = join(chestDir, "reports");
 

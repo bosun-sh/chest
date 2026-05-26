@@ -2,9 +2,10 @@ import { describe, expect, it } from "bun:test";
 import { mkdir } from "node:fs/promises";
 import { execFileSync, spawnSync } from "node:child_process";
 import { join } from "node:path";
+import { createTempDir } from "../support/temp-dir";
 
 const repoRoot = process.cwd();
-const tempRoot = join("/private/tmp", `chest-e2e-${Date.now()}`);
+const tempRoot = createTempDir("chest-e2e");
 
 describe("ohtools cli", () => {
   it("exposes the Chest registry and can initialize a store", async () => {
