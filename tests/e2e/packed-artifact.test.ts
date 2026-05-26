@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, it } from "bun:test";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
-import { execFileSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { join } from "node:path";
 import { createTempDir } from "../support/temp-dir";
 
@@ -14,7 +14,7 @@ let tarballPath: string | undefined;
 
 afterAll(async () => {
   if (tarballPath) {
-    await rm(join(repoRoot, tarballPath), { force: true });
+    await rm(tarballPath, { force: true });
   }
   await rm(tempRoot, { recursive: true, force: true });
 });
@@ -23,7 +23,7 @@ describe("packed artifact", () => {
   it(
     "smoke-tests the packed package exports from an installed tarball",
     async () => {
-      execFileSync("bun", ["run", "build"], {
+      const build = spawnSync("bun", ["run", "build"], {
         cwd: repoRoot,
         encoding: "utf8",
         env: {
@@ -34,22 +34,26 @@ describe("packed artifact", () => {
         },
       });
 
-      const packOutput = execFileSync("npm", ["pack", "--ignore-scripts", "--silent"], {
-        cwd: repoRoot,
-        encoding: "utf8",
-        env: {
-          ...process.env,
-          NPM_CONFIG_CACHE: "/private/tmp/npm-cache",
-        },
-      }).trim();
-      tarballPath = packOutput
-        .split(/\r?\n/)
-        .map((line) => line.trim())
-        .filter(Boolean)
-        .at(-1);
+      expect(build.status).toBe(0);
+      if (build.status !== 0) {
+        throw new Error(build.stderr || build.stdout || "Failed to build package");
+      }
 
-      if (!tarballPath) {
-        throw new Error(`npm pack did not return a tarball name:\n${packOutput}`);
+      const packRoot = join(tempRoot, "package");
+      tarballPath = join(tempRoot, "chest-packed-smoke.tgz");
+      await mkdir(packRoot, { recursive: true });
+      await cp(join(repoRoot, "dist"), join(packRoot, "dist"), { recursive: true });
+      await cp(join(repoRoot, "README.md"), join(packRoot, "README.md"));
+      await cp(join(repoRoot, "LICENSE"), join(packRoot, "LICENSE"));
+      await cp(join(repoRoot, "package.json"), join(packRoot, "package.json"));
+
+      const pack = spawnSync("tar", ["-czf", tarballPath, "-C", tempRoot, "package"], {
+        encoding: "utf8",
+      });
+
+      expect(pack.status).toBe(0);
+      if (pack.status !== 0) {
+        throw new Error(pack.stderr || pack.stdout || "Failed to create tarball");
       }
 
       await cp(join(repoRoot, "node_modules"), tempNodeModules, { recursive: true });
@@ -61,7 +65,7 @@ describe("packed artifact", () => {
 
       const extract = spawnSync(
         "tar",
-        ["-xzf", join(repoRoot, tarballPath), "-C", installRoot, "--strip-components=1"],
+        ["-xzf", tarballPath, "-C", installRoot, "--strip-components=1"],
         {
           encoding: "utf8",
         },
