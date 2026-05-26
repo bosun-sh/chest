@@ -1,0 +1,18 @@
+- id: okr-1
+  objective: Deliver chest v1 to production
+  keyResults:
+    - id: kr-1
+      description: All 30 spec files written
+      target: 30 files
+    - id: kr-2
+      description: All acceptance criteria covered by tests
+      target: "100%"
+- id: okr-2
+  objective: Achieve agent self-governance
+  keyResults:
+    - id: kr-3
+      description: Zero human checkpoints in CI
+      target: "0"
+    - id: kr-4
+      description: Validation latency under 5s
+      target: 5000ms

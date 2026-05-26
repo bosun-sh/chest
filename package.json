@@ -1,0 +1,82 @@
+{
+  "name": "@bosun-sh/chest",
+  "version": "0.0.1",
+  "description": "Local governance store for AI agent workflows.",
+  "license": "Apache-2.0",
+  "author": "bosun.sh",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bosun-sh/chest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bosun-sh/chest/issues"
+  },
+  "homepage": "https://github.com/bosun-sh/chest#readme",
+  "keywords": [
+    "ai",
+    "governance",
+    "mcp",
+    "ohtools",
+    "workflow",
+    "yaml"
+  ],
+  "engines": {
+    "bun": ">=1.3.9"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./ohtools": {
+      "types": "./dist/ohtools.d.ts",
+      "default": "./dist/ohtools.js"
+    },
+    "./cli": {
+      "types": "./dist/workspace/cli-adapter.d.ts",
+      "default": "./dist/workspace/cli-adapter.js"
+    },
+    "./mcp": {
+      "types": "./dist/workspace/mcp-server.d.ts",
+      "default": "./dist/workspace/mcp-server.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json"
+  ],
+  "scripts": {
+    "lint": "bunx biome lint .",
+    "test": "bun test",
+    "test:unit": "bun test tests/unit tests/integration",
+    "test:e2e": "bun test tests/e2e",
+    "build": "bunx tsc -p tsconfig.build.json",
+    "pack:check": "env NPM_CONFIG_CACHE=$(node -e \"process.stdout.write(require('node:os').tmpdir() + '/npm-cache')\") npm pack --dry-run",
+    "smoke:packed": "bun test tests/e2e/packed-artifact.test.ts",
+    "release:check": "bun run lint && bun run test:unit && bun run test:e2e && bun run build && bun run pack:check && bun run smoke:packed",
+    "publish": "bun run release:check && npm publish --ignore-scripts",
+    "prepack": "env TMPDIR=$(node -e \"process.stdout.write(require('node:os').tmpdir())\") XDG_CACHE_HOME=$(node -e \"process.stdout.write(require('node:os').tmpdir())\") BUN_INSTALL_CACHE_DIR=$(node -e \"process.stdout.write(require('node:os').tmpdir() + '/bun-cache')\") bun run build",
+    "typecheck": "bunx tsc --noEmit",
+    "ohtools:list": "bunx ohtools --app ./src/ohtools.ts list",
+    "ohtools:docs": "bunx ohtools --app ./src/ohtools.ts docs",
+    "ohtools:graph": "bunx ohtools --app ./src/ohtools.ts graph"
+  },
+  "dependencies": {
+    "@bosun-sh/ohtools": "^0.1.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "effect": "^3.13.10"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.15",
+    "husky": "^9.1.7",
+    "typescript": "^6.0.3"
+  }
+}

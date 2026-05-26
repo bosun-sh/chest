@@ -1,0 +1,6 @@
+- id: dor-1
+  text: Plan includes acceptance criteria
+  severity: blocking
+- id: dor-2
+  text: Plan identifies key risks
+  severity: advisory
