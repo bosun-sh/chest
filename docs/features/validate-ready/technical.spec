@@ -40,7 +40,7 @@
       .chest/definition-of-ready.yaml   (schema: dor.v1)
       .chest/okrs.yaml                  (schema: okrs.v1, optional)
     Writes:
-      .chest/reports/&lt;timestamp&gt;-ready.json  (schema: report.v1)
+      .chest/reports/&lt;timestamp&gt;-ready.yaml  (schema: report.v1)
     Write performed by plugin bridge via ReportRepository.write.
   </yaml_touchpoints>
 

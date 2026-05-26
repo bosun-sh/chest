@@ -38,7 +38,7 @@
       .chest/kpis.yaml                 (schema: kpis.v1, for required KPIs only)
       .chest/okrs.yaml                 (schema: okrs.v1, optional)
     Writes:
-      .chest/reports/&lt;timestamp&gt;-done.json  (schema: report.v1)
+      .chest/reports/&lt;timestamp&gt;-done.yaml  (schema: report.v1)
     Write performed by plugin bridge via ReportRepository.write.
   </yaml_touchpoints>
 

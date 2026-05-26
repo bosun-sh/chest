@@ -102,7 +102,7 @@
       <file name="kpis.yaml">kpis.v1</file>
       <file name="definition-of-ready.yaml">dor.v1</file>
       <file name="definition-of-done.yaml">dod.v1</file>
-      <file name="reports/&lt;timestamp&gt;-&lt;workflow&gt;.json">report.v1</file>
+      <file name="reports/&lt;timestamp&gt;-&lt;workflow&gt;.yaml">report.v1</file>
     </files>
     <write_policy>All writes use atomic temp-file + rename.</write_policy>
   </storage_conventions>

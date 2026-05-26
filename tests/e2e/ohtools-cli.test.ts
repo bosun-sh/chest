@@ -1,7 +1,6 @@
 import { describe, expect, it } from "bun:test";
 import { mkdir } from "node:fs/promises";
 import { execFileSync, spawnSync } from "node:child_process";
-import { join } from "node:path";
 import { createTempDir } from "../support/temp-dir";
 
 const repoRoot = process.cwd();

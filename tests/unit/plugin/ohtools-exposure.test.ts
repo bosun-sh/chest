@@ -1,6 +1,5 @@
 import { describe, expect, it } from "bun:test";
 import { mkdir } from "node:fs/promises";
-import { join } from "node:path";
 import { chestToolIds } from "../../../src/plugin/registry";
 import { chestInputSchemas } from "../../../src/plugin/public-schemas";
 import chestApp from "../../../src/ohtools";

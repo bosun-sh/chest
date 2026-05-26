@@ -50,7 +50,7 @@
 
   <yaml_touchpoints>
     Reads: none (snapshot is passed in by the caller via tool input).
-    Writes: .chest/reports/&lt;timestamp&gt;-align.json (schema: report.v1).
+    Writes: .chest/reports/&lt;timestamp&gt;-align.yaml (schema: report.v1).
     Write is performed by the plugin bridge via ReportRepository.write, not by
     the entity Effect program src/judge/align.ts.
   </yaml_touchpoints>

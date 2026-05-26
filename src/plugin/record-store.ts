@@ -28,6 +28,11 @@ type CollectionMeta<T> = {
   validateList(value: unknown): ValidationResult<T[]>;
 };
 
+const REPORT_FILE_EXTENSIONS = [".yaml", ".yml", ".json"] as const;
+
+const isReportFileName = (name: string): boolean =>
+  REPORT_FILE_EXTENSIONS.some((extension) => name.endsWith(extension));
+
 const collectionMeta: { [K in CollectionName]: CollectionMeta<unknown> } = {
   okrs: { label: "OKR", validateList: validateOKRs },
   kpis: { label: "KPI", validateList: validateKPIs },
@@ -209,7 +214,7 @@ export const writeReportFile = async (
   report: ValidationReport,
 ): Promise<ToolResult<{ path: string }>> => {
   const paths = resolveChestPaths(root);
-  const filePath = `${paths.reportsDir}/${report.timestamp.replace(/[:.]/g, "-")}-${report.workflow}.json`;
+  const filePath = `${paths.reportsDir}/${report.timestamp.replace(/[:.]/g, "-")}-${report.workflow}.yaml`;
   try {
     await mkdir(paths.reportsDir, { recursive: true });
     await atomicWriteText(filePath, stringifyYaml(report));
@@ -229,7 +234,7 @@ export const listReportFiles = async (
     const reports: ReportSummary[] = [];
 
     for (const entry of entries) {
-      if (!entry.isFile() || !entry.name.endsWith(".json")) {
+      if (!entry.isFile() || !isReportFileName(entry.name)) {
         continue;
       }
 
@@ -268,7 +273,7 @@ export const readReportFile = async (
   try {
     const entries = await readdir(paths.reportsDir, { withFileTypes: true });
     for (const entry of entries) {
-      if (!entry.isFile() || !entry.name.endsWith(".json")) {
+      if (!entry.isFile() || !isReportFileName(entry.name)) {
         continue;
       }
 

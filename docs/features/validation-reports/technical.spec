@@ -38,7 +38,7 @@
 
   <yaml_touchpoints>
     Reads:
-      .chest/reports/&lt;timestamp&gt;-&lt;workflow&gt;.json  (schema: report.v1)
+      .chest/reports/&lt;timestamp&gt;-&lt;workflow&gt;.yaml  (schema: report.v1)
     Never writes (writes are performed by the validate-ready, validate-done,
     and judge-governance-alignment plugin bridges via ReportRepository.write).
   </yaml_touchpoints>
