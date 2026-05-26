@@ -23,7 +23,18 @@ describe("packed artifact", () => {
   it(
     "smoke-tests the packed package exports from an installed tarball",
     async () => {
-      const packOutput = execFileSync("npm", ["pack", "--silent"], {
+      execFileSync("bun", ["run", "build"], {
+        cwd: repoRoot,
+        encoding: "utf8",
+        env: {
+          ...process.env,
+          TMPDIR: "/private/tmp",
+          XDG_CACHE_HOME: "/private/tmp",
+          BUN_INSTALL_CACHE_DIR: "/private/tmp/bun-cache",
+        },
+      });
+
+      const packOutput = execFileSync("npm", ["pack", "--ignore-scripts", "--silent"], {
         cwd: repoRoot,
         encoding: "utf8",
         env: {
