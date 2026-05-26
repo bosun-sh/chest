@@ -6,9 +6,10 @@ import type { KPIEvidence } from "../../../src/kpis/schema";
 import type { OKR } from "../../../src/okrs/schema";
 import { parseYaml } from "../../../src/shared/yaml-parse";
 import type { ValidationReport } from "../../../src/validation/schema";
+import { createTempDir } from "../../support/temp-dir";
 
 const fixtureRoot = join(process.cwd(), "tests/fixtures/governance/valid");
-const tempRoot = join("/private/tmp", `chest-done-${Date.now()}`);
+const tempRoot = createTempDir("chest-done");
 const chestDir = join(tempRoot, ".chest");
 const validationDonePath = join(process.cwd(), "src/validation/done.ts");
 const kpiRunPath = join(process.cwd(), "src/kpis/run.ts");

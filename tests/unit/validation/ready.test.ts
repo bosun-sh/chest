@@ -5,9 +5,10 @@ import type { DoRCriterion } from "../../../src/dor/schema";
 import type { OKR } from "../../../src/okrs/schema";
 import { parseYaml } from "../../../src/shared/yaml-parse";
 import type { ValidationReport } from "../../../src/validation/schema";
+import { createTempDir } from "../../support/temp-dir";
 
 const fixtureRoot = join(process.cwd(), "tests/fixtures/governance/valid");
-const tempRoot = join("/private/tmp", `chest-ready-${Date.now()}`);
+const tempRoot = createTempDir("chest-ready");
 const chestDir = join(tempRoot, ".chest");
 const validationReadyPath = join(process.cwd(), "src/validation/ready.ts");
 

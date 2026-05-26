@@ -2,8 +2,13 @@ import { describe, expect, it } from "bun:test";
 import { join } from "node:path";
 import { resolveChestPaths } from "../../src/workspace/storage-paths";
 import { atomicWriteText } from "../../src/shared/atomic-write";
-import { readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { readArrayFile, writeArrayFile } from "../../src/workspace/yaml-repository";
+import { createTempDir } from "../support/temp-dir";
+
+const atomicTempRoot = createTempDir("chest-atomic");
+const arrayTempRoot = createTempDir("chest-array");
+const yamlTempRoot = createTempDir("chest-yaml");
 
 describe("storage helpers", () => {
   it("resolves the .chest store from the workspace root", () => {
@@ -38,19 +43,18 @@ describe("storage helpers", () => {
   });
 
   it("writes atomically into the target file", async () => {
-    const filePath = join("/private/tmp", `chest-atomic-${Date.now()}.json`);
+    const filePath = join(atomicTempRoot, "store.json");
     await atomicWriteText(filePath, "[1,2,3]\n");
 
     const contents = await readFile(filePath, "utf8");
     expect(contents.trim()).toBe("[1,2,3]");
 
-    const directory = join("/private/tmp");
-    const entries = await readdir(directory);
+    const entries = await readdir(atomicTempRoot);
     expect(entries.some((entry) => entry.includes(".chest-") && entry.endsWith(".tmp"))).toBeFalsy();
   });
 
   it("round-trips an array file through the repository helper", async () => {
-    const filePath = join("/private/tmp", `chest-array-${Date.now()}.yaml`);
+    const filePath = join(arrayTempRoot, "records.yaml");
     const records = [{ id: "okr-1", objective: "Goal", keyResults: [] }];
 
     await writeArrayFile(filePath, records);
@@ -60,7 +64,8 @@ describe("storage helpers", () => {
   });
 
   it("parses handwritten YAML that is not JSON", async () => {
-    const filePath = join("/private/tmp", `chest-yaml-${Date.now()}.yaml`);
+    const filePath = join(yamlTempRoot, "records.yaml");
+    await mkdir(yamlTempRoot, { recursive: true });
     await writeFile(
       filePath,
       `- id: okr-1
@@ -86,6 +91,8 @@ describe("storage helpers", () => {
   });
 
   it("removes test files after writing", async () => {
-    await rm(join("/private/tmp", `chest-atomic-${Date.now()}.json`), { force: true });
+    await rm(atomicTempRoot, { recursive: true, force: true });
+    await rm(arrayTempRoot, { recursive: true, force: true });
+    await rm(yamlTempRoot, { recursive: true, force: true });
   });
 });
