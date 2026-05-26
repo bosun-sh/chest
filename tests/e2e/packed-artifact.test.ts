@@ -1,6 +1,7 @@
 import { afterAll, describe, expect, it } from "bun:test";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createTempDir } from "../support/temp-dir";
 
@@ -28,9 +29,9 @@ describe("packed artifact", () => {
         encoding: "utf8",
         env: {
           ...process.env,
-          TMPDIR: "/private/tmp",
-          XDG_CACHE_HOME: "/private/tmp",
-          BUN_INSTALL_CACHE_DIR: "/private/tmp/bun-cache",
+          TMPDIR: tmpdir(),
+          XDG_CACHE_HOME: tmpdir(),
+          BUN_INSTALL_CACHE_DIR: join(tmpdir(), "bun-cache"),
         },
       });
 
