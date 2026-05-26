@@ -32,8 +32,8 @@ const doneReport: ValidationReport = {
 
 beforeEach(async () => {
   await mkdir(reportsDir, { recursive: true });
-  await writeFile(join(reportsDir, "2026-05-23T10-00-00Z-ready.json"), JSON.stringify(readyReport));
-  await writeFile(join(reportsDir, "2026-05-22T09-00-00Z-done.json"), JSON.stringify(doneReport));
+  await writeFile(join(reportsDir, "2026-05-23T10-00-00Z-ready.yaml"), JSON.stringify(readyReport));
+  await writeFile(join(reportsDir, "2026-05-22T09-00-00Z-done.yaml"), JSON.stringify(doneReport));
 });
 
 afterEach(async () => {
@@ -121,7 +121,7 @@ describe("chest.reports tools", () => {
       }
 
       await writeFile(
-        join(reportsDir, "2026-05-24T10-00-00Z-ready.json"),
+        join(reportsDir, "2026-05-24T10-00-00Z-ready.yaml"),
         JSON.stringify({ id: "rep-2026-05-24T10-00-00Z-ready", workflow: "ready" }),
       );
       const malformedList = await reportsListTool.run(

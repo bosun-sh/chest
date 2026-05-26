@@ -4,19 +4,47 @@
   "description": "Local governance store for AI agent workflows.",
   "license": "Apache-2.0",
   "author": "bosun.sh",
-  "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bosun-sh/chest.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bosun-sh/chest/issues"
+  },
+  "homepage": "https://github.com/bosun-sh/chest#readme",
+  "keywords": [
+    "ai",
+    "governance",
+    "mcp",
+    "ohtools",
+    "workflow",
+    "yaml"
+  ],
+  "engines": {
+    "bun": ">=1.3.9"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
       "default": "./dist/index.js"
     },
     "./ohtools": {
       "types": "./dist/ohtools.d.ts",
-      "require": "./dist/ohtools.js",
       "default": "./dist/ohtools.js"
+    },
+    "./cli": {
+      "types": "./dist/workspace/cli-adapter.d.ts",
+      "default": "./dist/workspace/cli-adapter.js"
+    },
+    "./mcp": {
+      "types": "./dist/workspace/mcp-server.d.ts",
+      "default": "./dist/workspace/mcp-server.js"
     }
   },
   "files": [
@@ -31,8 +59,9 @@
     "test:unit": "bun test tests/unit tests/integration",
     "test:e2e": "bun test tests/e2e",
     "build": "bunx tsc -p tsconfig.build.json",
-    "prepack": "bun run build",
-    "prepare": "husky",
+    "pack:check": "env NPM_CONFIG_CACHE=/private/tmp/npm-cache npm pack --dry-run",
+    "smoke:packed": "bun test tests/e2e/packed-artifact.test.ts",
+    "prepack": "env TMPDIR=/private/tmp XDG_CACHE_HOME=/private/tmp BUN_INSTALL_CACHE_DIR=/private/tmp/bun-cache bun run build",
     "typecheck": "bunx tsc --noEmit",
     "ohtools:list": "bunx ohtools --app ./src/ohtools.ts list",
     "ohtools:docs": "bunx ohtools --app ./src/ohtools.ts docs",
@@ -45,6 +74,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
-    "husky": "^9.1.7"
+    "husky": "^9.1.7",
+    "typescript": "^6.0.3"
   }
 }
