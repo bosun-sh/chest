@@ -61,6 +61,8 @@
     "build": "bunx tsc -p tsconfig.build.json",
     "pack:check": "env NPM_CONFIG_CACHE=/private/tmp/npm-cache npm pack --dry-run",
     "smoke:packed": "bun test tests/e2e/packed-artifact.test.ts",
+    "release:check": "bun run lint && bun run test:unit && bun run test:e2e && bun run build && bun run pack:check && bun run smoke:packed",
+    "publish": "bun run release:check && npm publish --ignore-scripts",
     "prepack": "env TMPDIR=/private/tmp XDG_CACHE_HOME=/private/tmp BUN_INSTALL_CACHE_DIR=/private/tmp/bun-cache bun run build",
     "typecheck": "bunx tsc --noEmit",
     "ohtools:list": "bunx ohtools --app ./src/ohtools.ts list",
