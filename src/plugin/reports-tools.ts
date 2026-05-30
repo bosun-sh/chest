@@ -1,7 +1,7 @@
 import { defineTool, jsonSchema } from "@bosun-sh/ohtools";
+import { ok } from "../shared/result";
 import { chestInputSchemas } from "./public-schemas";
 import { listReportFiles, readReportFile } from "./record-store";
-import { ok } from "../shared/result";
 
 type ReportsListInput = { workflow?: string; since?: string };
 

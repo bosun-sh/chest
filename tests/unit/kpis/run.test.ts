@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from "bun:test";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { runAllKPIs } from "../../../src/kpis/run-all";
 import { runKPI } from "../../../src/kpis/run";
+import { runAllKPIs } from "../../../src/kpis/run-all";
 import type { KPI } from "../../../src/kpis/schema";
 import { kpisRunTool } from "../../../src/plugin/kpis-tools";
 import { createTempDir } from "../../support/temp-dir";

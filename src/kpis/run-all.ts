@@ -1,7 +1,7 @@
 import { Effect } from "effect";
-import { KPIRepository, KPIRunner, type KPIRepositoryError, type KPIRunnerError } from "./ports";
-import type { KPI, KPIEvidence } from "./schema";
+import { KPIRepository, type KPIRepositoryError, KPIRunner, type KPIRunnerError } from "./ports";
 import { runKPI } from "./run";
+import type { KPI, KPIEvidence } from "./schema";
 
 const executeAllKPIs = async (kpis: KPI[]): Promise<KPIEvidence[]> => {
   const results: KPIEvidence[] = [];

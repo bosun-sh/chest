@@ -1,9 +1,9 @@
 import { access, mkdir, readFile } from "node:fs/promises";
-import { resolveChestPaths } from "./storage-paths";
 import { atomicWriteText } from "../shared/atomic-write";
-import { fail, ok, type ToolResult } from "../shared/result";
 import { ERR_CHEST_03, ERR_CHEST_10 } from "../shared/error-codes";
+import { fail, ok, type ToolResult } from "../shared/result";
 import { parseYaml, stringifyYaml } from "../shared/yaml-parse";
+import { resolveChestPaths } from "./storage-paths";
 
 export type InitWorkspaceInput = {
   dir?: string;

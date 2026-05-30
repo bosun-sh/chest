@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { listDoD } from "../../../src/dod/list";
-import { upsertDoD } from "../../../src/dod/upsert";
 import type { DoDCriterion } from "../../../src/dod/schema";
+import { upsertDoD } from "../../../src/dod/upsert";
 
 const criteria: DoDCriterion[] = [
   { id: "dod-1", text: "All tests pass", severity: "blocking", requiresKpi: "kpi-1" },

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "bun:test";
+import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { resolveChestPaths } from "../../src/workspace/storage-paths";
 import { atomicWriteText } from "../../src/shared/atomic-write";
-import { mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { resolveChestPaths } from "../../src/workspace/storage-paths";
 import { readArrayFile, writeArrayFile } from "../../src/workspace/yaml-repository";
 import { createTempDir } from "../support/temp-dir";
 

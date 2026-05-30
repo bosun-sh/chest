@@ -1,7 +1,7 @@
 import { describe, expect, it } from "bun:test";
 import { listDoR } from "../../../src/dor/list";
-import { upsertDoR } from "../../../src/dor/upsert";
 import type { DoRCriterion } from "../../../src/dor/schema";
+import { upsertDoR } from "../../../src/dor/upsert";
 
 const criteria: DoRCriterion[] = [
   { id: "dor-1", text: "Plan includes acceptance criteria", severity: "blocking" },

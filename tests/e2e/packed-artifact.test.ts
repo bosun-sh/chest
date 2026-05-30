@@ -1,6 +1,6 @@
 import { afterAll, describe, expect, it } from "bun:test";
-import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { spawnSync } from "node:child_process";
+import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createTempDir } from "../support/temp-dir";
