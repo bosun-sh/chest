@@ -1,11 +1,8 @@
 import { defineGroup, plugin } from "@bosun-sh/ohtools";
+import { dodListTool, dodUpsertTool } from "./dod-tools";
+import { dorListTool, dorUpsertTool } from "./dor-tools";
 import { initTool } from "./init-tool";
-import {
-  okrsGetTool,
-  okrsListTool,
-  okrsRemoveTool,
-  okrsUpsertTool,
-} from "./okrs-tools";
+import { judgeAlignTool } from "./judge-tools";
 import {
   kpisGetTool,
   kpisListTool,
@@ -14,11 +11,14 @@ import {
   kpisRunTool,
   kpisUpsertTool,
 } from "./kpis-tools";
-import { dorListTool, dorUpsertTool } from "./dor-tools";
-import { dodListTool, dodUpsertTool } from "./dod-tools";
-import { validateDoneTool, validateReadyTool } from "./validate-tools";
-import { judgeAlignTool } from "./judge-tools";
+import {
+  okrsGetTool,
+  okrsListTool,
+  okrsRemoveTool,
+  okrsUpsertTool,
+} from "./okrs-tools";
 import { reportsGetTool, reportsListTool } from "./reports-tools";
+import { validateDoneTool, validateReadyTool } from "./validate-tools";
 
 const okrsGroup = defineGroup(
   { id: "okrs", description: "OKR governance tools." },

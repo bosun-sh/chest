@@ -1,6 +1,5 @@
 import { Context } from "effect";
-import type { ValidationReport } from "./schema";
-import type { ReportSummary } from "./schema";
+import type { ReportSummary, ValidationReport } from "./schema";
 
 export type ReportRepositoryError =
   | { _tag: "not_found"; id: string }

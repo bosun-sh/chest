@@ -1,8 +1,8 @@
 import { describe, expect, it } from "bun:test";
 import { mkdir } from "node:fs/promises";
-import { chestToolIds } from "../../../src/plugin/registry";
-import { chestInputSchemas } from "../../../src/plugin/public-schemas";
 import chestApp from "../../../src/ohtools";
+import { chestInputSchemas } from "../../../src/plugin/public-schemas";
+import { chestToolIds } from "../../../src/plugin/registry";
 import { chestCliApp } from "../../../src/workspace/cli-adapter";
 import { chestMcpApp } from "../../../src/workspace/mcp-server";
 import { createTempDir } from "../../support/temp-dir";

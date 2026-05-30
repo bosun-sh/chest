@@ -1,2 +1,4 @@
-bun run test:e2e
-bun run build
+#!/usr/bin/env sh
+set -eu
+
+bun run ci:prepush

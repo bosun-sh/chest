@@ -1,13 +1,13 @@
 import { describe, expect, it } from "bun:test";
 import { copyFile, mkdir, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { parseYaml } from "../../src/shared/yaml-parse";
-import { validateOKRs } from "../../src/okrs/schema";
-import { validateKPIs } from "../../src/kpis/schema";
-import { validateDoR } from "../../src/dor/schema";
 import { validateDoD } from "../../src/dod/schema";
-import { loadCollection, readRecord } from "../../src/plugin/record-store";
+import { validateDoR } from "../../src/dor/schema";
+import { validateKPIs } from "../../src/kpis/schema";
 import type { OKR } from "../../src/okrs/schema";
+import { validateOKRs } from "../../src/okrs/schema";
+import { loadCollection, readRecord } from "../../src/plugin/record-store";
+import { parseYaml } from "../../src/shared/yaml-parse";
 import { createTempDir } from "../support/temp-dir";
 
 const fixtureRoot = join(process.cwd(), "tests/fixtures/governance");

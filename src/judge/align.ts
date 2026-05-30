@@ -1,9 +1,9 @@
 import { Effect } from "effect";
-import { Clock, systemClock, type Clock as ClockService } from "../shared/ports";
-import { JudgeProvider, type JudgeProvider as JudgeProviderService, type JudgeProviderError } from "./ports";
+import { Clock, type Clock as ClockService, systemClock } from "../shared/ports";
+import type { ValidationReport } from "../validation/schema";
+import { JudgeProvider, type JudgeProviderError, type JudgeProvider as JudgeProviderService } from "./ports";
 import { buildJudgePrompt } from "./prompt";
 import type { JudgeRequest, JudgeResponse } from "./schema";
-import type { ValidationReport } from "../validation/schema";
 
 const defaultFallbackReport = (
   request: JudgeRequest,

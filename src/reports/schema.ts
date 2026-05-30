@@ -1,6 +1,6 @@
 import type { ValidationReport } from "../validation/schema";
 
-export type { ValidationReport, EvidenceRef } from "../validation/schema";
+export type { EvidenceRef, ValidationReport } from "../validation/schema";
 
 export type ReportSummary = {
   id: string;

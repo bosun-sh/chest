@@ -1,6 +1,6 @@
 import { defineTool, jsonSchema } from "@bosun-sh/ohtools";
-import { chestInputSchemas } from "./public-schemas";
 import { initWorkspace } from "../workspace/init";
+import { chestInputSchemas } from "./public-schemas";
 
 export const initTool = defineTool({
   id: "chest.init",

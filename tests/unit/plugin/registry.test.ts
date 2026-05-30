@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { chestToolIds } from "../../../src/plugin/registry";
 import chestApp from "../../../src/ohtools";
+import { chestToolIds } from "../../../src/plugin/registry";
 
 describe("plugin registry", () => {
   it("registers the full Chest tool surface", () => {

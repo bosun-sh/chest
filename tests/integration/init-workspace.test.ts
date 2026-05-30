@@ -1,6 +1,6 @@
 import { describe, expect, it } from "bun:test";
-import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { constants as fsConstants } from "node:fs";
+import { access, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { initWorkspace } from "../../src/workspace/init";
 import { createTempDir } from "../support/temp-dir";

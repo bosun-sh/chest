@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { readFile, readdir } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const walk = async (dir: string): Promise<string[]> => {

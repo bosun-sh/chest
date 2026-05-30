@@ -1,12 +1,12 @@
-import { newId } from "../shared/ids";
-import { nowIso } from "../shared/time";
 import type { DoDCriterion } from "../dod/schema";
-import type { JudgeProvider } from "../judge/ports";
 import { judgeAlign } from "../judge/align";
+import type { JudgeProvider } from "../judge/ports";
 import type { KPIEvidence } from "../kpis/schema";
 import type { OKR } from "../okrs/schema";
-import type { ValidationReport } from "./schema";
+import { newId } from "../shared/ids";
+import { nowIso } from "../shared/time";
 import { validateDoneRules } from "./rules";
+import type { ValidationReport } from "./schema";
 
 const kpiEvidenceRefs = (kpiEvidence: KPIEvidence[]) =>
   kpiEvidence.map((item) => ({
