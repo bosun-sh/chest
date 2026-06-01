@@ -12,7 +12,12 @@ const fixtureRoot = join(process.cwd(), "tests/fixtures/governance/valid");
 const tempRoot = createTempDir("chest-done");
 const chestDir = join(tempRoot, ".chest");
 const validationDonePath = join(process.cwd(), "src/validation/done.ts");
-const kpiRunPath = join(process.cwd(), "src/kpis/run.ts");
+let importCounter = 0;
+
+const importValidateTools = async (label: string) => {
+  importCounter += 1;
+  return import(`../../../src/plugin/validate-tools?${label}=${importCounter}`);
+};
 
 const report: ValidationReport = {
   id: "rep-2026-05-23T10-00-00Z-done",
@@ -40,7 +45,6 @@ afterEach(async () => {
 describe("chest.validate.done handler", () => {
   it("loads DoD, runs the required KPI, embeds KPI evidence refs, and persists a report", async () => {
     const captured: Array<unknown[]> = [];
-    const kpiCalls: string[] = [];
 
     mock.module(validationDonePath, () => ({
       validateDone: async (...args: unknown[]) => {
@@ -49,21 +53,20 @@ describe("chest.validate.done handler", () => {
       },
     }));
 
-    mock.module(kpiRunPath, () => ({
-      runKPI: async (kpi: DoDCriterion & { command: string[]; timeoutMs: number }) => {
-        kpiCalls.push(kpi.id);
-        return {
-          kpiId: kpi.id,
-          exitCode: 0,
-          stdout: "42 tests pass",
-          stderr: "",
-          timedOut: false,
-          durationMs: 42,
-        };
-      },
-    }));
+    await writeFile(
+      join(chestDir, "kpis.yaml"),
+      JSON.stringify([
+        {
+          id: "kpi-1",
+          name: "Test suite passes",
+          target: "exit 0",
+          command: ["echo", "42 tests pass"],
+          timeoutMs: 1000,
+        },
+      ]),
+    );
 
-    const { validateDoneTool } = await import("../../../src/plugin/validate-tools");
+    const { validateDoneTool } = await importValidateTools("runs-required-kpi");
     const cwd = process.cwd();
     process.chdir(tempRoot);
 
@@ -74,13 +77,13 @@ describe("chest.validate.done handler", () => {
       );
 
       expect(result.ok).toBe(true);
-      expect(kpiCalls).toEqual(["kpi-1"]);
       expect(captured).toHaveLength(1);
       const [, dod, okrs, kpiEvidence] = captured[0] as [string, DoDCriterion[], OKR[], KPIEvidence[]];
       expect(dod).toHaveLength(2);
       expect(okrs).toHaveLength(2);
       expect(kpiEvidence).toHaveLength(1);
       expect(kpiEvidence[0]?.kpiId).toBe("kpi-1");
+      expect(kpiEvidence[0]?.stdout).toContain("42 tests pass");
 
       const files = await readdir(join(chestDir, "reports"));
       expect(files).toHaveLength(1);
@@ -93,7 +96,6 @@ describe("chest.validate.done handler", () => {
 
   it("uses supplied KPI results instead of rerunning commands", async () => {
     const captured: Array<unknown[]> = [];
-    let runCount = 0;
 
     mock.module(validationDonePath, () => ({
       validateDone: async (...args: unknown[]) => {
@@ -102,21 +104,20 @@ describe("chest.validate.done handler", () => {
       },
     }));
 
-    mock.module(kpiRunPath, () => ({
-      runKPI: async () => {
-        runCount += 1;
-        return {
-          kpiId: "kpi-1",
-          exitCode: 0,
-          stdout: "42 tests pass",
-          stderr: "",
-          timedOut: false,
-          durationMs: 42,
-        };
-      },
-    }));
+    await writeFile(
+      join(chestDir, "kpis.yaml"),
+      JSON.stringify([
+        {
+          id: "kpi-1",
+          name: "Would fail if executed",
+          target: "should not run",
+          command: ["__no_such_cmd__"],
+          timeoutMs: 1000,
+        },
+      ]),
+    );
 
-    const { validateDoneTool } = await import("../../../src/plugin/validate-tools");
+    const { validateDoneTool } = await importValidateTools("supplied-kpis");
     const cwd = process.cwd();
     process.chdir(tempRoot);
 
@@ -137,7 +138,6 @@ describe("chest.validate.done handler", () => {
       );
 
       expect(result.ok).toBe(true);
-      expect(runCount).toBe(0);
       expect(captured).toHaveLength(1);
       const [, , , kpiEvidence] = captured[0] as [string, DoDCriterion[], OKR[], KPIEvidence[]];
       expect(kpiEvidence).toEqual(supplied);
@@ -171,13 +171,7 @@ describe("chest.validate.done handler", () => {
       ]),
     );
 
-    mock.module(kpiRunPath, () => ({
-      runKPI: async () => {
-        throw { _tag: "command_not_found", command: "__no_such_cmd__" };
-      },
-    }));
-
-    const { validateDoneTool } = await import(`../../../src/plugin/validate-tools?missing-kpi=${Date.now()}`);
+    const { validateDoneTool } = await importValidateTools("missing-kpi");
     const cwd = process.cwd();
     process.chdir(tempRoot);
 
