@@ -1,9 +1,9 @@
 import { describe, expect, it } from "bun:test";
 import { copyFile, mkdir, readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { atomicWriteText } from "../../src/shared/atomic-write";
-import { upsertRecord } from "../../src/plugin/record-store";
 import type { OKR } from "../../src/okrs/schema";
+import { upsertRecord } from "../../src/plugin/record-store";
+import { atomicWriteText } from "../../src/shared/atomic-write";
 import { createTempDir } from "../support/temp-dir";
 
 const fixtureRoot = join(process.cwd(), "tests/fixtures/governance/valid");

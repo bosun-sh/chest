@@ -2,8 +2,8 @@ import { describe, expect, it } from "bun:test";
 import { getOKR } from "../../../src/okrs/get";
 import { listOKRs } from "../../../src/okrs/list";
 import { removeOKR } from "../../../src/okrs/remove";
-import { upsertOKR } from "../../../src/okrs/upsert";
 import type { OKR } from "../../../src/okrs/schema";
+import { upsertOKR } from "../../../src/okrs/upsert";
 
 const okrs: OKR[] = [
   {

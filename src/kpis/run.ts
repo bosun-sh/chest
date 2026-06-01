@@ -1,7 +1,7 @@
 import { Effect } from "effect";
-import { KPIRepository, KPIRunner, type KPIRepositoryError, type KPIRunnerError } from "./ports";
-import type { KPI, KPIEvidence } from "./schema";
 import { normalizeKPIEvidence } from "./evidence";
+import { KPIRepository, type KPIRepositoryError, KPIRunner, type KPIRunnerError } from "./ports";
+import type { KPI, KPIEvidence } from "./schema";
 
 type BunSpawnSyncResult = {
   stdout: Uint8Array | string;

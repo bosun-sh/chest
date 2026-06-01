@@ -1,8 +1,8 @@
 import { defineTool, jsonSchema } from "@bosun-sh/ohtools";
-import { chestInputSchemas } from "./public-schemas";
-import { loadCollection, upsertRecord } from "./record-store";
 import type { DoDCriterion } from "../dod/schema";
 import { ok } from "../shared/result";
+import { chestInputSchemas } from "./public-schemas";
+import { loadCollection, upsertRecord } from "./record-store";
 
 export const dodListTool = defineTool({
   id: "chest.dod.list",

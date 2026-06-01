@@ -1,10 +1,10 @@
 import { describe, expect, it } from "bun:test";
 import { Effect } from "effect";
-import { Clock } from "../../../src/shared/ports";
-import { buildJudgePrompt } from "../../../src/judge/prompt";
-import { JudgeProvider } from "../../../src/judge/ports";
 import { judgeAlign, judgeAlignEffect } from "../../../src/judge/align";
+import { JudgeProvider } from "../../../src/judge/ports";
+import { buildJudgePrompt } from "../../../src/judge/prompt";
 import type { JudgeRequest } from "../../../src/judge/schema";
+import { Clock } from "../../../src/shared/ports";
 import { createFakeJudgeProvider } from "../../doubles/fake-judge-provider";
 
 const request: JudgeRequest = {

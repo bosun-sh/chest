@@ -1,7 +1,7 @@
-import { buildJudgePrompt } from "../../prompt";
 import type { JudgeProvider } from "../../ports";
-import { readOpenAIJudgeConfig } from "./config";
+import { buildJudgePrompt } from "../../prompt";
 import type { JudgeRequest, JudgeResponse } from "../../schema";
+import { readOpenAIJudgeConfig } from "./config";
 
 const isJudgeResponse = (value: unknown): value is JudgeResponse => {
   if (!value || typeof value !== "object") {

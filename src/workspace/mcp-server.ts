@@ -1,4 +1,4 @@
-import { Ohtools, normalizeError } from "@bosun-sh/ohtools";
+import { normalizeError, Ohtools } from "@bosun-sh/ohtools";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { Effect } from "effect";

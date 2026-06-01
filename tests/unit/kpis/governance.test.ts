@@ -2,8 +2,8 @@ import { describe, expect, it } from "bun:test";
 import { getKPI } from "../../../src/kpis/get";
 import { listKPIs } from "../../../src/kpis/list";
 import { removeKPI } from "../../../src/kpis/remove";
-import { upsertKPI } from "../../../src/kpis/upsert";
 import type { KPI } from "../../../src/kpis/schema";
+import { upsertKPI } from "../../../src/kpis/upsert";
 
 const kpis: KPI[] = [
   { id: "kpi-1", name: "Test suite passes", target: "exit 0", command: ["bun", "test"], timeoutMs: 5000 },

@@ -1,11 +1,11 @@
+import type { DoRCriterion } from "../dor/schema";
+import { judgeAlign } from "../judge/align";
+import type { JudgeProvider } from "../judge/ports";
+import type { OKR } from "../okrs/schema";
 import { newId } from "../shared/ids";
 import { nowIso } from "../shared/time";
-import type { DoRCriterion } from "../dor/schema";
-import type { JudgeProvider } from "../judge/ports";
-import { judgeAlign } from "../judge/align";
-import type { OKR } from "../okrs/schema";
-import type { ValidationReport } from "./schema";
 import { ruleBasedReadinessCheck, validateReadyRules } from "./rules";
+import type { ValidationReport } from "./schema";
 
 const fallbackReadyReport = (plan: string, dor: DoRCriterion[]): ValidationReport => {
   const response = ruleBasedReadinessCheck(plan, dor);
