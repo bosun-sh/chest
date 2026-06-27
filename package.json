@@ -72,6 +72,7 @@
     "release:dry-run": "bun run ci:premerge",
     "prepublishOnly": "bun run ci:premerge",
     "publish": "bun run ci:premerge && npm publish --ignore-scripts",
+    "publish:npm": "bun publish --access public",
     "prepare": "husky",
     "prepack": "env TMPDIR=$(node -e \"process.stdout.write(require('node:os').tmpdir())\") XDG_CACHE_HOME=$(node -e \"process.stdout.write(require('node:os').tmpdir())\") BUN_INSTALL_CACHE_DIR=$(node -e \"process.stdout.write(require('node:os').tmpdir() + '/bun-cache')\") bun run build",
     "ohtools:list": "bunx ohtools --app ./src/ohtools.ts list",
