@@ -1,6 +1,6 @@
 {
   "name": "@bosun-sh/chest",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Local governance store for AI agent workflows.",
   "license": "Apache-2.0",
   "author": "bosun.sh",
@@ -80,7 +80,7 @@
     "ohtools:graph": "bunx ohtools --app ./src/ohtools.ts graph"
   },
   "dependencies": {
-    "@bosun-sh/ohtools": "^0.1.0",
+    "@bosun-sh/ohtools": "^0.2.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "effect": "^3.13.10"
   },

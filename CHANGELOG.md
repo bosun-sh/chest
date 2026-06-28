@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-06-28
+
 ### Added
 
 - Public npm-facing package metadata and subpath exports for the CLI and MCP entrypoints.
@@ -23,5 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Initial Chest registry, CLI, and MCP tool surface.
 - YAML-backed governance storage for OKRs, KPIs, DoR, DoD, validation reports, and judge workflows.
 
-[Unreleased]: https://github.com/bosun-sh/chest/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/bosun-sh/chest/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/bosun-sh/chest/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/bosun-sh/chest/releases/tag/v0.0.1
