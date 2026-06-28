@@ -51,7 +51,8 @@
     "dist",
     "README.md",
     "LICENSE",
-    "package.json"
+    "package.json",
+    "CHANGELOG.md"
   ],
   "scripts": {
     "check": "biome check .",
