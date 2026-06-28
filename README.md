@@ -1,5 +1,9 @@
 # Chest
 
+[![CI](https://github.com/bosun-sh/chest/actions/workflows/ci.yml/badge.svg)](https://github.com/bosun-sh/chest/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@bosun-sh/chest)](https://www.npmjs.com/package/@bosun-sh/chest)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+
 Chest is an open-source self-governance store for AI agent workflows.
 
 It keeps project governance criteria in local, versioned files so agents can
