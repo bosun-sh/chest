@@ -5,7 +5,7 @@
     "": {
       "name": "@bosun-sh/chest",
       "dependencies": {
-        "@bosun-sh/ohtools": "^0.1.0",
+        "@bosun-sh/ohtools": "^0.2.0",
         "@modelcontextprotocol/sdk": "^1.29.0",
         "effect": "^3.13.10",
       },
@@ -35,7 +35,7 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.4.15", "", { "os": "win32", "cpu": "x64" }, "sha512-zBrGq5mx5wwpnow4+2BxUvleDM+GNd4sLbPaMapsSLQLD0NGRCquqPBTgN+7XkUteHvj7M+BstuI8tmnV7+HgQ=="],
 
-    "@bosun-sh/ohtools": ["@bosun-sh/ohtools@0.1.1", "", { "dependencies": { "@modelcontextprotocol/sdk": "^1.29.0", "effect": "^3.13.10" }, "bin": { "ohtools": "dist/bin/ohtools.js" } }, "sha512-WhCCsMekTRBqzdVZRL06BhrFJ22OyuIPojdzPGsNA/4xGXOCOtcP7Eo9MZ/tzBQFDxj7L/t2PgYb4Sit6IPZKA=="],
+    "@bosun-sh/ohtools": ["@bosun-sh/ohtools@0.2.0", "", { "dependencies": { "@modelcontextprotocol/sdk": "^1.29.0", "effect": "^3.13.10" }, "bin": { "ohtools": "dist/bin/ohtools.js" } }, "sha512-eQZbZ62tX3N9RjpbD+65CICavK0w95Y7B6sh6jM+eGo26Qj+Jt5LxXUgXbJRUceZRm2wTNNY+ahsOFg/OoP2cA=="],
 
     "@hono/node-server": ["@hono/node-server@1.19.14", "", { "peerDependencies": { "hono": "^4" } }, "sha512-GwtvgtXxnWsucXvbQXkRgqksiH2Qed37H9xHZocE5sA3N8O8O8/8FA3uclQXxXVzc9XBZuEOMK7+r02FmSpHtw=="],
 

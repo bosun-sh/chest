@@ -1,6 +1,6 @@
 {
   "name": "@bosun-sh/chest",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Local governance store for AI agent workflows.",
   "license": "Apache-2.0",
   "author": "bosun.sh",
