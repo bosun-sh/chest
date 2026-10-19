@@ -13,6 +13,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Public provider-neutral `judgeValidation` API with explicit pass/fail/inconclusive/unavailable verdicts bound to criteria, task/candidate revisions and evidence digests.
 - Public judge provider and report types, with packed-package runtime and declaration checks. Existing tools and stored reports remain compatible.
 
+### Fixed
+
+- Remove the recursive npm publish lifecycle hook so a release uploads its version once and can proceed to tag creation.
+
 ## [0.2.0] - 2026-06-28
 
 ### Added
