@@ -37,3 +37,30 @@ export type GovernanceSnapshot = {
   dor: unknown[];
   dod: unknown[];
 };
+
+export type JudgeEvidenceRef = EvidenceRef & { digest: string };
+
+export type JudgeBinding = {
+  taskId: string;
+  taskRevision: string;
+  candidateRevision: string;
+  criteria: Array<{ id: string; text: string }>;
+  evidenceRefs: JudgeEvidenceRef[];
+};
+
+export type JudgeValidationRequest = {
+  mode: "ready" | "done";
+  binding: JudgeBinding;
+};
+
+export type JudgeValidationResponse = Omit<JudgeResponse, "evidenceRefs"> & JudgeValidationRequest & {
+  source: "judge" | "fallback";
+  evidenceRefs: JudgeEvidenceRef[];
+};
+
+export type JudgeValidationReport = Omit<ValidationReport, "evidenceRefs"> & {
+  verdict: "pass" | "fail" | "inconclusive" | "unavailable";
+  binding: JudgeBinding;
+  source: "judge" | "fallback" | "none";
+  evidenceRefs: JudgeEvidenceRef[];
+};

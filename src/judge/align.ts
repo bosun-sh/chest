@@ -1,6 +1,7 @@
 import { Effect } from "effect";
 import { Clock, type Clock as ClockService, systemClock } from "../shared/ports";
 import type { ValidationReport } from "../validation/schema";
+import { invokeJudge } from "./invoke";
 import { JudgeProvider, type JudgeProviderError, type JudgeProvider as JudgeProviderService } from "./ports";
 import { buildJudgePrompt } from "./prompt";
 import type { JudgeRequest, JudgeResponse } from "./schema";
@@ -18,7 +19,7 @@ const defaultFallbackReport = (
   followUps: ["Configure a judge provider before running alignment checks."],
 });
 
-const isJudgeResponse = (value: unknown): value is JudgeResponse => {
+export const isJudgeResponse = (value: unknown): value is JudgeResponse => {
   if (!value || typeof value !== "object") {
     return false;
   }
@@ -67,35 +68,8 @@ export const judgeAlignEffect = (
     const prompt = buildJudgePrompt(request);
     void prompt;
 
-    let lastRaw = "";
-
-    for (let attempt = 1; attempt <= 3; attempt += 1) {
-      const response = yield* Effect.tryPromise({
-        try: () => provider.judge(request),
-        catch: (cause) =>
-          ({
-            _tag: "unreachable",
-            provider: "judge",
-            cause,
-            message:
-              cause instanceof Error ? cause.message : "Judge provider unreachable.",
-          }) satisfies JudgeProviderError,
-      });
-
-      lastRaw = JSON.stringify(response);
-
-      if (isJudgeResponse(response)) {
-        return toReport(response, "align", clock);
-      }
-    }
-
-    return yield* Effect.fail({
-      _tag: "malformed_response",
-      provider: "judge",
-      raw: lastRaw,
-      attempt: 3,
-      message: "Judge response malformed after 3 attempts.",
-    } satisfies JudgeProviderError);
+    const response = yield* invokeJudge(request, provider, isJudgeResponse, 3);
+    return toReport(response, "align", clock);
   });
 
 export const judgeAlign = async (

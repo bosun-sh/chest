@@ -40,22 +40,18 @@ describe("packed artifact", () => {
         throw new Error(build.stderr || build.stdout || "Failed to build package");
       }
 
-      const packRoot = join(tempRoot, "package");
-      tarballPath = join(tempRoot, "chest-packed-smoke.tgz");
-      await mkdir(packRoot, { recursive: true });
-      await cp(join(repoRoot, "dist"), join(packRoot, "dist"), { recursive: true });
-      await cp(join(repoRoot, "README.md"), join(packRoot, "README.md"));
-      await cp(join(repoRoot, "LICENSE"), join(packRoot, "LICENSE"));
-      await cp(join(repoRoot, "package.json"), join(packRoot, "package.json"));
-
-      const pack = spawnSync("tar", ["-czf", tarballPath, "-C", tempRoot, "package"], {
+      await mkdir(tempRoot, { recursive: true });
+      const pack = spawnSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", tempRoot], {
+        cwd: repoRoot,
         encoding: "utf8",
+        env: { ...process.env, npm_config_cache: join(tmpdir(), "chest-npm-cache") },
       });
 
-      expect(pack.status).toBe(0);
       if (pack.status !== 0) {
         throw new Error(pack.stderr || pack.stdout || "Failed to create tarball");
       }
+      expect(pack.status).toBe(0);
+      tarballPath = join(tempRoot, JSON.parse(pack.stdout)[0].filename);
 
       await cp(join(repoRoot, "node_modules"), tempNodeModules, { recursive: true });
       await mkdir(installRoot, { recursive: true });
@@ -108,6 +104,18 @@ describe("packed artifact", () => {
         );
       }
       expect(smoke.status).toBe(0);
+
+      const judgeScript = join(tempRoot, "public-judge.ts");
+      await cp(join(repoRoot, "tests/fixtures/public-judge.ts"), judgeScript);
+      const judge = spawnSync("bun", [judgeScript], { cwd: tempRoot, encoding: "utf8" });
+      if (judge.status !== 0) throw new Error(`Packed judge contract failed:\n${judge.stdout}\n${judge.stderr}`);
+      expect(judge.status).toBe(0);
+      const types = spawnSync("bun", [
+        join(repoRoot, "node_modules/typescript/bin/tsc"), "--noEmit", "--strict", "--skipLibCheck",
+        "--target", "ES2022", "--module", "ESNext", "--moduleResolution", "Bundler", judgeScript,
+      ], { cwd: tempRoot, encoding: "utf8" });
+      if (types.status !== 0) throw new Error(`Packed judge declarations failed:\n${types.stdout}\n${types.stderr}`);
+      expect(types.status).toBe(0);
 
       const installedPackageJson = await readFile(join(installRoot, "package.json"), "utf8");
       expect(installedPackageJson).toContain('"name": "@bosun-sh/chest"');

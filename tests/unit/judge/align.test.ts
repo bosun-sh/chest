@@ -77,6 +77,14 @@ describe("judge alignment", () => {
     expect(report.rationale).toBe("Need more evidence.");
   });
 
+  it("preserves valid legacy responses with non-cloneable extensions", async () => {
+    const report = await judgeAlign(request, { judge: async () => ({
+      status: "passed", rationale: "All good.", confidence: 0.9,
+      followUps: [], evidenceRefs: [], extension: () => undefined,
+    }) });
+    expect(report).toMatchObject({ status: "passed", rationale: "All good.", confidence: 0.9 });
+  });
+
   it("retries malformed responses before failing", async () => {
     const provider = createFakeJudgeProvider({
       response: { not: "a valid judge response" },
