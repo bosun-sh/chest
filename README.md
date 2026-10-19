@@ -55,6 +55,97 @@ export default chestApp;
 bunx ohtools --app ./chest-app.ts list
 ```
 
+## Caller-supplied judges
+
+Use the public `judgeValidation` function for revision-bound readiness or
+completion reports. You supply the judge, which can use your existing local or
+subscription-backed runtime. Chest does not select a provider, authenticate,
+make API calls, or authorize completion or merge.
+
+This disposable fixture shows the contract without invoking a model:
+
+```ts
+import {
+  judgeValidation,
+  type JudgeProvider,
+  type JudgeValidationRequest,
+  type JudgeValidationResponse,
+} from "@bosun-sh/chest";
+
+const request: JudgeValidationRequest = {
+  mode: "done", // or "ready"
+  binding: {
+    taskId: "task-123",
+    taskRevision: "criteria-contract-revision",
+    candidateRevision: "exact-source-revision",
+    criteria: [{ id: "tests", text: "Required tests pass" }],
+    evidenceRefs: [{
+      kind: "test-log",
+      refId: "artifact:checks",
+      summary: "Required checks passed",
+      digest: "sha256:fixture-only",
+    }],
+  },
+};
+const fixture: JudgeProvider<JudgeValidationRequest, JudgeValidationResponse> = {
+  async judge(input) {
+    return {
+      ...input,
+      source: "judge",
+      status: "passed",
+      rationale: "Fixture evidence satisfies the supplied criteria.",
+      evidenceRefs: input.binding.evidenceRefs,
+      followUps: [],
+    };
+  },
+};
+const report = await judgeValidation(request, fixture);
+console.log(report.verdict, report.binding.candidateRevision);
+```
+
+`JudgeProvider` defaults to the legacy request/response types; its type arguments
+allow this strict contract. A strict provider may return `unknown` so Chest can
+validate decoded runtime output. It must return the mode and binding that were
+actually evaluated, `source: "judge"` for a real judgement (or `"fallback"` for
+an advisory fallback), a status, nonempty rationale, evidence citations, and
+follow-ups. Do not attach the current binding to an older or unbound judgement.
+
+The report's `verdict` is explicit:
+
+| Outcome | Verdict | Compatible `status` |
+| --- | --- | --- |
+| Bound judged success | `pass` | `passed` |
+| Bound judged failure | `fail` | `failed` |
+| Needs review, missing criteria/evidence, fallback, malformed output or mismatched binding | `inconclusive` | `needs_review` |
+| No provider, or provider throws/rejects | `unavailable` | `needs_review` |
+
+Criteria and evidence IDs must be unique, and revisions, criterion text and
+evidence fields must be nonempty. Invalid request shapes reject with `TypeError`;
+empty criteria/evidence arrays return `inconclusive` without calling the judge.
+Responses must echo the exact mode, task/candidate revisions, ordered criteria
+and ordered evidence bindings. Citations must be nonempty and match supplied
+references, including their digests. Optional confidence must be finite and in
+`[0, 1]`. Only a valid, matching response with `source: "judge"` can pass.
+Strict responses must be structured-cloneable. Chest validates the returned
+value and an owned snapshot, then uses that snapshot so later provider mutation
+cannot change the verdict. Sparse arrays, throwing properties and snapshot
+failures produce `inconclusive`.
+
+Each call invokes the provider at most once and has no fallback, retry, timeout,
+storage or network policy. The caller owns deadlines/cancellation, resolves and
+verifies evidence content against its digest, and ensures the judge evaluates
+all criteria. Digests and revisions are opaque caller-supplied identifiers;
+Chest checks their equality, not artifact contents or judge honesty. Provider
+errors become `unavailable` without exposing raw error details in the report.
+Persist the complete report to retain its binding and source; callers own the
+later acceptance/authorization decision and must recheck that the binding is
+still current.
+
+Existing CLI/MCP tools and stored report formats remain compatible. Their legacy
+`passed` status, including the nonempty-description completion fallback, is not
+an affirmative result from this strict API. Use `judgeValidation` and its full
+report when an independently judged result is required.
+
 ## What It Solves
 
 AI-assisted workflows often need governance, but repeated checkpoints can turn
