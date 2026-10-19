@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep packed-package checks compatible with npm 12 JSON output and dry-run publish lifecycles.
+
 ## [0.3.0] - 2026-10-19
 
 ### Added

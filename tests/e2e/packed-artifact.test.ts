@@ -2,7 +2,8 @@ import { afterAll, describe, expect, it } from "bun:test";
 import { spawnSync } from "node:child_process";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { basename, join } from "node:path";
+import { name as packageName } from "../../package.json";
 import { createTempDir } from "../support/temp-dir";
 
 const repoRoot = process.cwd();
@@ -10,6 +11,35 @@ const tempRoot = createTempDir("chest-packed-smoke");
 const installRoot = join(tempRoot, "node_modules", "@bosun-sh", "chest");
 const helperScript = join(tempRoot, "smoke.ts");
 const tempNodeModules = join(tempRoot, "node_modules");
+
+function packedFilename(stdout: string): string {
+  const result = JSON.parse(stdout);
+  // npm 12 keys pack results by package name; earlier versions return an array.
+  const filename = (Array.isArray(result) ? result[0] : result?.[packageName])?.filename;
+  if (typeof filename !== "string" || !filename.endsWith(".tgz") || basename(filename) !== filename) {
+    throw new Error("Invalid npm pack JSON: expected a tarball filename");
+  }
+  return filename;
+}
+
+describe("npm pack JSON", () => {
+  const filename = "bosun-sh-chest-0.3.0.tgz";
+  it.each([
+    ["npm 11 array", [{ filename }]],
+    ["npm 12 package-name keys", { [packageName]: { filename } }],
+  ])("reads %s", (_label, result) => {
+    expect(packedFilename(JSON.stringify(result))).toBe(filename);
+  });
+
+  it.each([
+    "not JSON", "null", "[]", "{}", '[{}]', '[{"filename":42}]',
+    '[{"filename":""}]', '[{"filename":"../outside.tgz"}]',
+    JSON.stringify({ [packageName]: {} }),
+    JSON.stringify({ other: { filename } }),
+  ])("rejects malformed output: %s", (stdout) => {
+    expect(() => packedFilename(stdout)).toThrow();
+  });
+});
 
 let tarballPath: string | undefined;
 
@@ -41,7 +71,8 @@ describe("packed artifact", () => {
       }
 
       await mkdir(tempRoot, { recursive: true });
-      const pack = spawnSync("npm", ["pack", "--ignore-scripts", "--json", "--pack-destination", tempRoot], {
+      // A parent publish --dry-run must still let this smoke test create its local tarball.
+      const pack = spawnSync("npm", ["pack", "--dry-run=false", "--ignore-scripts", "--json", "--pack-destination", tempRoot], {
         cwd: repoRoot,
         encoding: "utf8",
         env: { ...process.env, npm_config_cache: join(tmpdir(), "chest-npm-cache") },
@@ -51,7 +82,7 @@ describe("packed artifact", () => {
         throw new Error(pack.stderr || pack.stdout || "Failed to create tarball");
       }
       expect(pack.status).toBe(0);
-      tarballPath = join(tempRoot, JSON.parse(pack.stdout)[0].filename);
+      tarballPath = join(tempRoot, packedFilename(pack.stdout));
 
       await cp(join(repoRoot, "node_modules"), tempNodeModules, { recursive: true });
       await mkdir(installRoot, { recursive: true });
